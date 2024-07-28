@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <p>При регистрации произошла ошибка. Попробуйте еще раз</p>
+        <a href="{% url 'login' %}">Зарегистрироваться</a>
+    </div>
+{% endblock %}

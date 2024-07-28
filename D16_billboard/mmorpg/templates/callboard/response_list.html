@@ -1,0 +1,77 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+Responses
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все объявления -->
+{% block content %}
+   <h1>Все отклики автора статей {{ user.username }}</h1>
+<p><a href="{% url 'response_list' %}">Сбросить фильтр</a></p>
+ {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
+   <hr>
+   {% if responses %}
+       <table>
+           <tr>
+               <td width="150">Объявление</td>
+               <td width="700">Отклик</td>
+               <td width="150">Дата создания отклика</td>
+               <td width="100">Комментатор</td>
+               <td width="250">Ссылка</td>
+
+           </tr>
+           {% for response in response_list %}
+           <tr>
+               <td>{{ response.description }}</td>
+               <td>{{ response.text_of_response }}</td>
+               <td>{{ response.time_create|date:'d M Y'  }}</td>
+               <td>{{ response.commentator.username   }}</td>
+               td><a href="/advertisements/responses/{{ response.pk }}">Посмотри меня)</a></td>
+               <td>
+                   {% if user != response.author and response.status != True %}
+                   <a href="{% url 'response_accept' pk=response.id %}">Принять</a>
+                   <a href="{% url 'response_delete' pk=response.id %}">Удалить</a>
+                   {% else %}
+                   <p>Отклик принят</p>
+                   {% endif %}
+               </td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% elif not get %}
+        <h3>Выберите объявление для поиска откликов</h3>
+   {% else %}
+       <h2>Откликов нет!</h2>
+   {% endif %}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+Advertisement
+{% endblock title %}
+
+{% block content %}
+<h1>{{ advertisement.heading }}</h1>
+<h3>{% current_time '%d %b %Y' %}</h3>
+
+<hr>
+
+    {{ advertisement.text_ad }}
+    {{ advertisement.upload }}
+
+<hr>
+<div>Оставь свой <a href="/advertisements/{{ advertisement.pk }}/response/create/">отклик</a>.</div>
+
+    Загружено:
+    {{ advertisement.time_in|date:'d M Y' }}
+
+<div><a href="/advertisements/{{ advertisement.pk }}/update/">Изменить</a>.</div>
+<div><a href="/advertisements/{{ advertisement.pk }}/delete/">Удалить</a>.</div>
+
+{% endblock content %}

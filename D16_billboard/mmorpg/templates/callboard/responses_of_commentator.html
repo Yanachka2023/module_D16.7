@@ -1,0 +1,56 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+Responses
+{% endblock title %}
+
+{% block content %}
+<h1>Все отклики автора статей {{ user.username }}</h1>
+<hr>
+
+<table>
+    <tr>
+        <td>Дата публикации</td>
+        <td>Превью</td>
+        <td>комментатор</td>
+        <td>Статья</td>
+        <td>Ссылка</td>
+    </tr>
+
+    {% for response in commentatorresponses %}
+    {% if user.id is response.advertisement.author.id %}
+    <tr>
+        <td>{{ response.time_create|date:'d M Y' }}</td>
+        <td>{{ response.text_of_response|truncatechars:20 }}</td>
+        <td><a href="/responses/commentators/{{ response.commentator.id }}">{{ response.commentator.username }}</a></td>
+        <td>{{ response.advertisement.heading }}</td>
+        <td><a href="/advertisements/responses/{{ response.pk }}">Посмотри меня)</a></td>
+    </tr>
+
+    {% endif %}
+
+    {% endfor %}
+
+</table>
+
+    {% if page_obj.has_previous %}
+        <a href="?{% url_replace page=1 %}">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}

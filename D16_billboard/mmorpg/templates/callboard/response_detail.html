@@ -1,0 +1,40 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Advertisement
+{% endblock title %}
+
+
+{% block content %}
+<h2>Объявление: {{post.title}}</h2>
+<h3>{{ post.text }}</h3>
+
+{% if user.is_authenticated %}
+<h4>Добавить отклик</h4>
+
+    <form method="post" style="...">
+          {% csrf_token %}
+            <div style="...">
+                {{ replay_form.text }}
+            </div>
+            <button type="submit" class="btn btn-primary">Отправвить отклик</button>
+    </form>
+{% else %}
+    <p>Авторизуйтесь, чтобы оставить отклик</p>
+    <a  class="btn btn_primary", href="{% url 'profile' %}">Войти</a>
+{% endif %}
+
+{% if post.сomment_set.all %}
+    {% for userresponse in advertisement.comment_set.all %}
+    <div style="margin-top: 10px">
+    <h4>Все отклики</h4>
+    <p>Автор: {{ userresponse.commentator}} Текст отклика  {{ userresponse.text_of_response}}</p>
+    </div>
+    {% endfor %}
+{% endif %}
+<h3>{{ post.text }}</h3>
+
+{% endblock content %}
+
+
+

@@ -1,0 +1,65 @@
+{% extends 'flatpages/default.html' %}
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page title</title>
+</head>
+<body>
+
+    {{ string }}
+</body>
+
+
+   <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input class="btn btn-outline-primary" type="submit" value= Search>
+   </form>
+   <hr>
+  {% if search %}
+
+           {% for post in search %}
+<table cellspacing="5" cellpadding="10" border="1" width="100%">
+           <tr>
+               <a href="{% url 'post_detail' pk=post.id %}">
+                 <h4 >{{ post.title|truncatewords:2 }}</h4>
+                </a>
+               <td align="left" width="150">{{ post.created|date:'d.m.Y' }}</td>
+               <td align="left" width="200" > {{ post.author }}</td>
+               <td align="center" width="1000">{{ post.text }}</td>
+           </tr>
+     </table>
+           {% endfor %}
+
+
+
+   {% endif %}
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}
+
+</html>

@@ -1,0 +1,19 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+{% if user.id is advertisement.author.id %}
+    <h1>Объявление</h1>
+    <hr>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+
+{% else %}
+     <h2>Вы не автор этого объявления!</h2>
+{% endif %}
+
+<td><a href="/advertisements/{{ advertisement.pk }}">Обратно к объявлению</a>.</td>
+<td><a href="/advertisements/">Обратно к объявлениям</a>.</td>
+{% endblock content %}
